@@ -1,9 +1,10 @@
 from itertools import permutations
 
+
 def spreadsheet_lines(filename):
     with open(filename, "r") as spreadsheet:
         for line in spreadsheet.readlines():
-            line = tuple(map(lambda x: int(x), line.split("\t")))
+            line = tuple(map(int, line.split("\t")))
             yield line
 
 
