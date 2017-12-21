@@ -48,8 +48,10 @@ def generate_next_art(art):
 
     for x in range(squares_count_on_each_axis):
         for y in range(squares_count_on_each_axis):
+            # position of top left corner of analyzed square in old art
             left = x * square_size
             top = y * square_size
+
             square = tuple([item[left:left+square_size] for item in art[top:top+square_size]])
 
             found = False
@@ -57,6 +59,8 @@ def generate_next_art(art):
                 if square in mod:
                     found = True
                     result = patterns[square_size][mod]
+                    
+                    # copy result of using pattern to new art
                     for r_index, r in enumerate(result):
                         next_art[top+y+r_index] += r
                     break
@@ -65,8 +69,7 @@ def generate_next_art(art):
     return next_art
 
 def load_patterns(filename):
-    patterns_2 = {}
-    patterns_3 = {}
+    patterns = {2: {}, 3: {}}
 
     with open(filename, "r") as f:
         for line in f.readlines():
@@ -77,12 +80,9 @@ def load_patterns(filename):
             result = tuple(result.strip().split("/"))
 
             all_modifications = collect_all_modifications(pattern)
-            if len(pattern) == 2:
-                patterns_2[all_modifications] = result
-            else:
-                patterns_3[all_modifications] = result
+            patterns[len(pattern)][all_modifications] = result
 
-    return {2: patterns_2, 3: patterns_3}
+    return patterns
 
 
 if __name__ == '__main__':
